@@ -2,7 +2,7 @@
 
 ---
 
-# Generation Metadata Schema for Data Warehouse Automation
+# Generic Metadata Schema for Data Warehouse Automation
 
 #### Intent
 
