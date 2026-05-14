@@ -1,0 +1,34 @@
+{
+  "dataObjectMappings": [
+    {
+      "name": "MyDataObjectMapping",
+      "sourceDataObjects": [
+        {
+          "name": "CurrentDateQuerySqlServer",
+          "queryCode": "SELECT GETDATE() AS [CURRENT_DATE]",
+          "queryLanguage": "SQL"
+        },
+        {
+          "name": "CurrentDateQuerySysDateTime",
+          "queryCode": "SELECT SYSDATETIME() AS [CURRENT_DATE]",
+          "queryLanguage": "SQL"
+        }
+      ],
+      "targetDataObject": {
+        "name": "TableOneTarget"
+      },
+      "dataItemMappings": [
+        {
+          "sourceDataItems": [
+            {
+              "name": "CURRENT_DATE"
+            }
+          ],
+          "targetDataItem": {
+            "name": "CURRENT_DATE_TIME"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,689 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/data-solution-automation-engine/data-solution-automation-metadata-schema/GenericInterface/interfaceDataSolutionAutomationMetadataV2_1.json",
+  "title": "Schema for data solution code generation (v2.1).",
+  "description": "Standardized format for the metadata required to generate data logistics (ETL) and object creation (DDL) for Data Solutions such as a Data Warehouse or Data Lake. The intent is to decouple how individual software stores Data Solution Automation metadata from how this metadata is exchanged with other components, technologies, and solutions for data processing and structure generation.",
+  "type": "object",
+  "required": [ "dataObjectMappings" ],
+  "properties": {
+    "id": {
+      "title": "Id",
+      "description": "Optional identifier for the Data Object Mapping List.",
+      "type": [ "string", "null" ]
+    },
+    "name": {
+      "title": "Name",
+      "description": "Optional name of the Data Object Mapping List.",
+      "type": [ "string", "null" ]
+    },
+    "notes": {
+      "title": "Notes",
+      "description": "Free-format notes on the Data Object Mapping List.",
+      "type": [ "string", "null" ]
+    },
+    "dataObjectMappings": {
+      "title": "Data Object Mappings",
+      "description": "The list of source-to-target mappings between Data Objects.",
+      "type": "array",
+      "items": { "$ref": "#/definitions/dataObjectMapping" }
+    },
+    "classifications": {
+      "title": "Classifications",
+      "description": "Classifications applied to the Data Object Mapping List.",
+      "type": [ "array", "null" ],
+      "items": { "$ref": "#/definitions/dataClassification" },
+      "uniqueItems": true
+    },
+    "extensions": {
+      "title": "Extensions",
+      "description": "Key/Value pair extensions on the Data Object Mapping List.",
+      "type": [ "array", "null" ],
+      "items": { "$ref": "#/definitions/extension" },
+      "uniqueItems": true
+    },
+    "templateMappings": {
+      "title": "Template Mappings",
+      "description": "Template references that apply to the Data Object Mapping List.",
+      "type": [ "array", "null" ],
+      "items": { "$ref": "#/definitions/templateMapping" }
+    }
+  },
+  "definitions": {
+    "dataObjectMapping": {
+      "title": "Data Object Mapping",
+      "description": "An individual mapping between one or more source Data Objects and a target Data Object.",
+      "type": "object",
+      "required": [ "name", "sourceDataObjects", "targetDataObject" ],
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional unique identifier for the Data Object Mapping.",
+          "type": [ "string", "null" ]
+        },
+        "name": {
+          "title": "Name",
+          "description": "Name of the Data Object Mapping. Ideally unique within the list.",
+          "type": "string"
+        },
+        "notes": {
+          "title": "Notes",
+          "description": "Free-format notes on the Data Object Mapping.",
+          "type": [ "string", "null" ]
+        },
+        "sourceDataObjects": {
+          "title": "Source Data Objects",
+          "description": "One or more source Data Objects. A Data Object may represent a stored table or a query expression (when queryCode is set).",
+          "type": "array",
+          "items": { "$ref": "#/definitions/dataObject" }
+        },
+        "targetDataObject": {
+          "title": "Target Data Object",
+          "description": "The target Data Object of the mapping.",
+          "$ref": "#/definitions/dataObject"
+        },
+        "relatedDataObjects": {
+          "title": "Related Data Objects",
+          "description": "Data Objects related to the mapping for purposes other than the source/target relationship - for example lookups, merge joins, or lineage.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/dataObject" }
+        },
+        "relationships": {
+          "title": "Relationships",
+          "description": "Relationships defined on the mapping (parent/child, foreign keys, lookups, etc.).",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/relationship" }
+        },
+        "dataItems": {
+          "title": "Data Items",
+          "description": "Data Items specifically associated with this mapping, used as sources or targets in the mapping or its business key component mappings.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/dataItem" }
+        },
+        "dataItemMappings": {
+          "title": "Data Item Mappings",
+          "description": "The collection of individual column-to-column mappings.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/dataItemMapping" }
+        },
+        "businessKeyDefinitions": {
+          "title": "Business Key Definitions",
+          "description": "Business Key(s) defined for the Data Object Mapping.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/businessKeyDefinition" }
+        },
+        "filterCriterion": {
+          "title": "Filter Criterion",
+          "description": "Optional filter applied to the source-to-target mapping.",
+          "type": [ "string", "null" ]
+        },
+        "enabled": {
+          "title": "Enabled",
+          "description": "Indicates whether this mapping is enabled.",
+          "type": [ "boolean", "null" ]
+        },
+        "classifications": {
+          "title": "Classifications",
+          "description": "Classifications applied to the mapping.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/dataClassification" },
+          "uniqueItems": true
+        },
+        "extensions": {
+          "title": "Extensions",
+          "description": "Key/Value pair extensions on the mapping.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/extension" },
+          "uniqueItems": true
+        },
+        "templateMappings": {
+          "title": "Template Mappings",
+          "description": "Template references that apply to this mapping.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/templateMapping" }
+        }
+      }
+    },
+    "dataObject": {
+      "title": "Data Object",
+      "description": "A table, file, view, query, or similar data entity. When queryCode is set, the Data Object represents a query expression (view, script, or procedure) rather than a stored table.",
+      "type": "object",
+      "required": [ "name" ],
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional identifier for the Data Object.",
+          "type": [ "string", "null" ]
+        },
+        "name": {
+          "title": "Name",
+          "description": "Name of the Data Object.",
+          "type": "string"
+        },
+        "dataConnection": {
+          "title": "Data Connection",
+          "description": "Connection information for the Data Object.",
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/definitions/dataConnection" }
+          ]
+        },
+        "dataItems": {
+          "title": "Data Items",
+          "description": "Data Items belonging to this Data Object.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/dataItem" }
+        },
+        "queryCode": {
+          "title": "Query Code",
+          "description": "When set, the Data Object represents a query expression rather than a stored table.",
+          "type": [ "string", "null" ]
+        },
+        "queryLanguage": {
+          "title": "Query Language",
+          "description": "The language of queryCode (e.g. SQL).",
+          "type": [ "string", "null" ]
+        },
+        "businessKeyDefinitions": {
+          "title": "Business Key Definitions",
+          "description": "Business Key definitions on the Data Object, allowing a business key to be defined once on a source and reused across mappings.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/businessKeyDefinition" }
+        },
+        "relationships": {
+          "title": "Relationships",
+          "description": "Relationships to other Data Objects.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/relationship" }
+        },
+        "classifications": {
+          "title": "Classifications",
+          "description": "Classifications applied to the Data Object.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/dataClassification" },
+          "uniqueItems": true
+        },
+        "extensions": {
+          "title": "Extensions",
+          "description": "Key/Value pair extensions on the Data Object.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/extension" },
+          "uniqueItems": true
+        },
+        "templateMappings": {
+          "title": "Template Mappings",
+          "description": "Template references that apply to this Data Object.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/templateMapping" }
+        },
+        "notes": {
+          "title": "Notes",
+          "description": "Free-format notes on the Data Object.",
+          "type": [ "string", "null" ]
+        }
+      }
+    },
+    "dataItem": {
+      "title": "Data Item",
+      "description": "A column or attribute of a Data Object. When queryCode is set, the Data Item represents a calculated column rather than a stored one.",
+      "type": "object",
+      "required": [ "name" ],
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional identifier for the Data Item.",
+          "type": [ "string", "null" ]
+        },
+        "name": {
+          "title": "Name",
+          "description": "Name of the Data Item.",
+          "type": "string"
+        },
+        "dataType": {
+          "title": "Data Type",
+          "description": "Data type (e.g. VARCHAR, int, text).",
+          "type": [ "string", "null" ]
+        },
+        "characterLength": {
+          "title": "Character Length",
+          "description": "Length for text-typed Data Items.",
+          "type": [ "integer", "null" ]
+        },
+        "numericPrecision": {
+          "title": "Numeric Precision",
+          "description": "Total digits in a numeric value.",
+          "type": [ "integer", "null" ]
+        },
+        "numericScale": {
+          "title": "Numeric Scale",
+          "description": "Digits to the right of the decimal point.",
+          "type": [ "integer", "null" ]
+        },
+        "ordinalPosition": {
+          "title": "Ordinal Position",
+          "description": "Position of the item within its parent Data Object.",
+          "type": [ "integer", "null" ]
+        },
+        "isPrimaryKey": {
+          "title": "Is Primary Key",
+          "description": "Indicates whether this item is part of a Primary Key.",
+          "type": [ "boolean", "null" ]
+        },
+        "isNullable": {
+          "title": "Is Nullable",
+          "description": "Indicates whether this item accepts null values.",
+          "type": [ "boolean", "null" ]
+        },
+        "queryCode": {
+          "title": "Query Code",
+          "description": "When set, the Data Item represents a calculated column expression rather than a stored value.",
+          "type": [ "string", "null" ]
+        },
+        "queryLanguage": {
+          "title": "Query Language",
+          "description": "The language of queryCode (e.g. SQL).",
+          "type": [ "string", "null" ]
+        },
+        "classifications": {
+          "title": "Classifications",
+          "description": "Classifications applied to the Data Item.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/dataClassification" },
+          "uniqueItems": true
+        },
+        "extensions": {
+          "title": "Extensions",
+          "description": "Key/Value pair extensions on the Data Item.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/extension" },
+          "uniqueItems": true
+        },
+        "notes": {
+          "title": "Notes",
+          "description": "Free-format notes on the Data Item.",
+          "type": [ "string", "null" ]
+        }
+      }
+    },
+    "dataItemMapping": {
+      "title": "Data Item Mapping",
+      "description": "A mapping between one or more source Data Items and a target Data Item.",
+      "type": "object",
+      "required": [ "sourceDataItems", "targetDataItem" ],
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional identifier for the Data Item Mapping.",
+          "type": [ "string", "null" ]
+        },
+        "name": {
+          "title": "Name",
+          "description": "Optional name for the Data Item Mapping.",
+          "type": [ "string", "null" ]
+        },
+        "sourceDataItems": {
+          "title": "Source Data Items",
+          "description": "Source Data Items for the mapping. A Data Item may represent a column or a query expression (when queryCode is set).",
+          "type": "array",
+          "items": { "$ref": "#/definitions/dataItem" }
+        },
+        "targetDataItem": {
+          "title": "Target Data Item",
+          "description": "Target Data Item of the mapping.",
+          "$ref": "#/definitions/dataItem"
+        },
+        "extensions": {
+          "title": "Extensions",
+          "description": "Key/Value pair extensions on the Data Item Mapping.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/extension" },
+          "uniqueItems": true
+        },
+        "notes": {
+          "title": "Notes",
+          "description": "Free-format notes on the Data Item Mapping.",
+          "type": [ "string", "null" ]
+        }
+      }
+    },
+    "dataItemMappingRef": {
+      "title": "Data Item Mapping Reference",
+      "description": "A lightweight, identifier-based variant of a Data Item Mapping for use inside a Relationship. References Data Items by id rather than embedding them.",
+      "type": "object",
+      "properties": {
+        "sourceDataItemIds": {
+          "title": "Source Data Item Ids",
+          "description": "Identifiers of the source Data Items.",
+          "type": [ "array", "null" ],
+          "items": { "type": "string" }
+        },
+        "targetDataItemId": {
+          "title": "Target Data Item Id",
+          "description": "Identifier of the target Data Item.",
+          "type": [ "string", "null" ]
+        }
+      }
+    },
+    "dataConnection": {
+      "title": "Data Connection",
+      "description": "Connection information that can be used by a Data Object. Typically a key, token, reference, or connection string.",
+      "type": "object",
+      "required": [ "name" ],
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional identifier for the Data Connection.",
+          "type": [ "string", "null" ]
+        },
+        "name": {
+          "title": "Name",
+          "description": "Connection key, token, or string.",
+          "type": "string"
+        },
+        "classifications": {
+          "title": "Classifications",
+          "description": "Classifications applied to the Data Connection.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/dataClassification" },
+          "uniqueItems": true
+        },
+        "extensions": {
+          "title": "Extensions",
+          "description": "Key/Value pair extensions on the Data Connection.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/extension" },
+          "uniqueItems": true
+        },
+        "templateMappings": {
+          "title": "Template Mappings",
+          "description": "Template references that apply to this Data Connection.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/templateMapping" }
+        },
+        "notes": {
+          "title": "Notes",
+          "description": "Free-format notes on the Data Connection.",
+          "type": [ "string", "null" ]
+        }
+      }
+    },
+    "businessKeyDefinition": {
+      "title": "Business Key Definition",
+      "description": "Defines how a business key is composed from one or more components, each referencing a Data Item.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional identifier for the Business Key Definition.",
+          "type": [ "string", "null" ]
+        },
+        "name": {
+          "title": "Name",
+          "description": "Optional name of the Business Key Definition.",
+          "type": [ "string", "null" ]
+        },
+        "ordinalPosition": {
+          "title": "Ordinal Position",
+          "description": "Position of this business key definition within its parent mapping (relevant for Links with multiple business keys).",
+          "type": [ "integer", "null" ]
+        },
+        "businessKeyComponents": {
+          "title": "Business Key Components",
+          "description": "Components of the business key. The order of components is meaningful and is recorded on each component.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/businessKeyComponent" }
+        },
+        "businessKeyComponentMappings": {
+          "title": "Business Key Component Mappings (legacy)",
+          "description": "Legacy pre-v2.1 representation of business key components as Data Item Mappings. Retained for backward-compatible reading; new files should use businessKeyComponents.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/dataItemMapping" }
+        },
+        "surrogateKey": {
+          "title": "Surrogate Key",
+          "description": "Optional label for the resulting business key attribute.",
+          "type": [ "string", "null" ]
+        },
+        "classifications": {
+          "title": "Classifications",
+          "description": "Classifications applied to the Business Key Definition.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/dataClassification" },
+          "uniqueItems": true
+        },
+        "extensions": {
+          "title": "Extensions",
+          "description": "Key/Value pair extensions on the Business Key Definition.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/extension" },
+          "uniqueItems": true
+        },
+        "notes": {
+          "title": "Notes",
+          "description": "Free-format notes.",
+          "type": [ "string", "null" ]
+        }
+      }
+    },
+    "businessKeyComponent": {
+      "title": "Business Key Component",
+      "description": "An individual component of a Business Key Definition, referencing a Data Item.",
+      "type": "object",
+      "properties": {
+        "ordinalPosition": {
+          "title": "Ordinal Position",
+          "description": "Position of this component within the parent business key.",
+          "type": "integer"
+        },
+        "dataItem": {
+          "title": "Data Item",
+          "description": "The Data Item that forms this component of the business key.",
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/definitions/dataItem" }
+          ]
+        }
+      }
+    },
+    "relationship": {
+      "title": "Relationship",
+      "description": "A relationship from one Data Object to another. Supports lineage relationships (parent/child), foreign keys, and sub/supertypes.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional identifier for the relationship.",
+          "type": [ "string", "null" ]
+        },
+        "name": {
+          "title": "Name",
+          "description": "Name of the relationship.",
+          "type": [ "string", "null" ]
+        },
+        "type": {
+          "title": "Type",
+          "description": "Free-format type label, e.g. \"parent\", \"child\", \"lookup\".",
+          "type": [ "string", "null" ]
+        },
+        "cardinality": {
+          "title": "Cardinality",
+          "description": "Cardinality of the relationship, expressed as min/max ranges on each end.",
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/definitions/cardinality" }
+          ]
+        },
+        "relatedDataObjectId": {
+          "title": "Related Data Object Id",
+          "description": "Identifier-only reference to the related Data Object. Use when the object is defined elsewhere in the file.",
+          "type": [ "string", "null" ]
+        },
+        "relatedDataObject": {
+          "title": "Related Data Object",
+          "description": "Embedded related Data Object. Use when carrying the full object inline.",
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/definitions/dataObject" }
+          ]
+        },
+        "dataItemMappings": {
+          "title": "Data Item Mappings",
+          "description": "Foreign-key style Data Item mappings, expressed as identifier references.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/dataItemMappingRef" }
+        },
+        "classifications": {
+          "title": "Classifications",
+          "description": "Classifications applied to the relationship.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/dataClassification" },
+          "uniqueItems": true
+        },
+        "extensions": {
+          "title": "Extensions",
+          "description": "Key/Value pair extensions on the relationship.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/extension" },
+          "uniqueItems": true
+        },
+        "notes": {
+          "title": "Notes",
+          "description": "Free-format notes on the relationship.",
+          "type": [ "string", "null" ]
+        }
+      }
+    },
+    "cardinality": {
+      "title": "Cardinality",
+      "description": "Captures the cardinality and ordinality of a relationship via min/max ranges on each end.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional identifier.",
+          "type": [ "string", "null" ]
+        },
+        "name": {
+          "title": "Name",
+          "description": "Optional name for a recognised cardinality construct, e.g. \"one-to-one\", \"one-to-many\".",
+          "type": [ "string", "null" ]
+        },
+        "fromRange": {
+          "title": "From Range",
+          "description": "The 'from' component of the cardinality.",
+          "$ref": "#/definitions/cardinalityRange"
+        },
+        "toRange": {
+          "title": "To Range",
+          "description": "The 'to' component of the cardinality.",
+          "$ref": "#/definitions/cardinalityRange"
+        },
+        "classifications": {
+          "title": "Classifications",
+          "description": "Classifications applied to the cardinality.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/dataClassification" },
+          "uniqueItems": true
+        },
+        "extensions": {
+          "title": "Extensions",
+          "description": "Key/Value pair extensions.",
+          "type": [ "array", "null" ],
+          "items": { "$ref": "#/definitions/extension" },
+          "uniqueItems": true
+        },
+        "notes": {
+          "title": "Notes",
+          "description": "Free-format notes.",
+          "type": [ "string", "null" ]
+        }
+      }
+    },
+    "cardinalityRange": {
+      "title": "Cardinality Range",
+      "description": "A min/max range used for one end of a Cardinality. For example {\"min\": \"1\", \"max\": \"N\"} expresses \"at least one, possibly many\".",
+      "type": "object",
+      "properties": {
+        "min": {
+          "title": "Minimum",
+          "description": "Lower bound of the range. Typically \"0\" or \"1\".",
+          "type": [ "string", "null" ]
+        },
+        "max": {
+          "title": "Maximum",
+          "description": "Upper bound of the range. Typically \"1\" or \"N\".",
+          "type": [ "string", "null" ]
+        }
+      }
+    },
+    "dataClassification": {
+      "title": "Data Classification",
+      "description": "A free-form label/category that can be applied to schema objects to drive generation logic.",
+      "type": "object",
+      "required": [ "classification" ],
+      "properties": {
+        "id": {
+          "title": "Id",
+          "description": "Optional identifier for the classification.",
+          "type": [ "string", "null" ]
+        },
+        "classification": {
+          "title": "Classification",
+          "description": "The classification value. Usually a keyword used for automation purposes.",
+          "type": "string"
+        },
+        "group": {
+          "title": "Group",
+          "description": "Grouping or category for this classification (e.g. \"Solution Layer\", \"Logical\", \"Physical\").",
+          "type": [ "string", "null" ]
+        },
+        "scope": {
+          "title": "Scope",
+          "description": "Scope areas in which this classification applies. When null or empty, applies everywhere. Values are camelCase tokens such as \"dataObjects\", \"connections\", \"mappings\", \"templates\", \"graph\".",
+          "type": [ "array", "null" ],
+          "items": { "type": "string" }
+        },
+        "notes": {
+          "title": "Notes",
+          "description": "Free-format notes on the classification.",
+          "type": [ "string", "null" ]
+        }
+      }
+    },
+    "extension": {
+      "title": "Extension",
+      "description": "A free-form key/value pair for additional context that is not part of the standard schema.",
+      "type": "object",
+      "required": [ "key" ],
+      "properties": {
+        "key": {
+          "title": "Key",
+          "description": "The Key in the Key/Value pair.",
+          "type": "string"
+        },
+        "value": {
+          "title": "Value",
+          "description": "The Value in the Key/Value pair.",
+          "type": [ "string", "null" ]
+        },
+        "notes": {
+          "title": "Notes",
+          "description": "Optional notes explaining the intent of the extension.",
+          "type": [ "string", "null" ]
+        }
+      }
+    },
+    "templateMapping": {
+      "title": "Template Mapping",
+      "description": "A reference to a template file that should be applied to the parent object. Lets metadata travel with the templates used to generate code from it.",
+      "type": "object",
+      "required": [ "templateFileName" ],
+      "properties": {
+        "templateFileName": {
+          "title": "Template File Name",
+          "description": "The file name of the template to apply.",
+          "type": "string"
+        }
+      }
+    }
+  }
+}

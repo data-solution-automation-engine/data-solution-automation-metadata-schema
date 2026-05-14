@@ -1,52 +1,63 @@
 name: Docs
 
 on:
-  # Runs on pushes targeting the default branch.
   push:
-    branches: ["main"]
-
-  # Allows you to run this workflow manually from the Actions tab.
+    branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
 jobs:
-  generate-docs:
-
-    permissions:
-      id-token: write
-      pages: write
-
-    runs-on: windows-latest
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: docssite
 
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Setup .NET 8
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
 
-    - name: Update DocFX
-      run: dotnet tool update -g docfx
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: docssite/pnpm-lock.yaml
 
-    - name: DocFX Build
-      working-directory: docs
-      run: docfx .\docfx.json
-      continue-on-error: false
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v3
-      with:
-        path: 'docs/_site'
+      - name: Generate schema reference pages from C# library
+        run: node scripts/generate-schema-reference.mjs
 
-    - name: Deploy to GitHub Pages
-      if: github.event_name == 'push'
-      id: deployment
-      uses: actions/deploy-pages@v4
+      - name: Build site
+        run: pnpm build
 
-#    - name: Publish
-#      if: github.event_name == 'push'
-#      uses: peaceiris/actions-gh-pages@v3
-#      with:
-#        github_token: ${{ secrets.GITHUB_TOKEN }}
-#        publish_dir: docs/_site
-#        force_orphan: true
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docssite/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

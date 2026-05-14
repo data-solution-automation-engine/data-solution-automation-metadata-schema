@@ -1,0 +1,39 @@
+{
+  "dataObjectMappings": [
+    {
+      "name": "CalculationExample",
+      "sourceDataObjects": [
+        {
+          "name": "SourceTable"
+        }
+      ],
+      "targetDataObject": {
+        "name": "TargetTable"
+      },
+      "dataItemMappings": [
+        {
+          "sourceDataItems": [
+            {
+              "name": "CustomerLastNameCalculation",
+              "queryCode": "SUBSTRING([Customer_Full_Name],INSTR(' '),LEN([Customer_Full_Name]))",
+              "queryLanguage": "SQL"
+            }
+          ],
+          "targetDataItem": {
+            "name": "Customer_Last_Name"
+          }
+        },
+        {
+          "sourceDataItems": [
+            {
+              "name": "ColumnOneSource"
+            }
+          ],
+          "targetDataItem": {
+            "name": "CustomerId"
+          }
+        }
+      ]
+    }
+  ]
+}

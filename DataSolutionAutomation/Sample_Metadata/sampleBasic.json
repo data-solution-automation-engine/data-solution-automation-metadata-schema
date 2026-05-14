@@ -1,0 +1,37 @@
+{
+  "dataObjectMappings": [
+    {
+      "name": "MappingOne",
+      "sourceDataObjects": [
+        {
+          "name": "TableOneSource"
+        }
+      ],
+      "targetDataObject": {
+        "name": "HelloWorldExampleTableOne"
+      },
+      "dataItemMappings": [
+        {
+          "sourceDataItems": [
+            {
+              "name": "ColumnOneSource"
+            }
+          ],
+          "targetDataItem": {
+            "name": "CustomerId"
+          }
+        },
+        {
+          "sourceDataItems": [
+            {
+              "name": "ColumnTwoSource"
+            }
+          ],
+          "targetDataItem": {
+            "name": "CustomerName"
+          }
+        }
+      ]
+    }
+  ]
+}

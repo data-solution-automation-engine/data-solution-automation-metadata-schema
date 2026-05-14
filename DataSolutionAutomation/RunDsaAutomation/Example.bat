@@ -1,0 +1,1 @@
+RunDsaAutomation -i D:\RunDsaAutomation\Input\HUB_CUSTOMER.json -p D:\RunDsaAutomation\Pattern\loadPatternHubView.handlebars -v -o -e sql

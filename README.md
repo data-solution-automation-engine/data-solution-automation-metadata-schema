@@ -1,19 +1,19 @@
-> **_NOTE:_**  the formal [Data Warehouse Automation Schema documentation](https://data-solution-automation-engine.github.io/data-warehouse-automation-metadata-schema/) is now available on Github pages.
+> **_NOTE:_**  the formal [Data Solution Automation Schema documentation](https://data-solution-automation-engine.github.io/data-solution-automation-metadata-schema/) is now available on Github pages.
 
 ---
 
-# Generic Metadata Schema for Data Warehouse Automation
+# Generic Metadata Schema for Data Solution Automation
 
 #### Intent
 
-To provide a collaborative space to discuss an exchange format concerning data logistics generation metadata, supporting Data Warehouse Automation. This adapter should contain all metadata necessary to generate the transformation logic for a Data Warehouse solution.
+To provide a collaborative space to discuss an exchange format concerning data logistics generation metadata, supporting Data Solution Automation. This adapter should contain all metadata necessary to generate the transformation logic for a Data Warehouse solution.
 
 #### Links / structure
 
 The following directories have been set up:
 
 * Generic interface, containing the Json schema definition.
-* Class Library (DataWarehouseAutomation) containing the object model for deserialisation, as well as various utility classes such as validation of files against the Json schema definition.
+* Class Library (DataSolutionAutomation) containing the object model for deserialization, as well as various utility classes such as validation of files against the Json schema definition.
 * Code examples (examples_handlebars), containing C# examples using the generic interface for various purposes.
 * Regression test project (test_project)
 
@@ -37,14 +37,14 @@ The fundamental requirements of the metadata adapter are:
 
 #### Background
 
-In the Data Warehouse Automation (DWA) domain there are many specialists (i.e. ETL developers, Data Warehouse and Data Architects, BI analysts etc.) who have been, or are working on, proprietary meta models to support forward-engineering of code and designs. 
+In the Data Solution Automation (DSA) domain there are many specialists (i.e. ETL developers, Data Warehouse and Data Architects, BI analysts etc.) who have been, or are working on, proprietary meta models to support forward-engineering of code and designs. 
 
-Some of these are built inside existing tools (i.e. ERwin, Powerdesigner) using SDKs or macros. Others use different development frameworks (.net, Java) and most use differently modelled repositories or file formats to persist data on disk.
+Some of these are built inside existing tools (i.e. ERwin, Power Designer) using SDKs or macros. Others use different development frameworks (.net, Java) and most use differently modelled repositories or file formats to persist data on disk.
 
-This is in addition to the many off-the-shelf DWA platforms, each of which has their own repository and format as well.
+This is in addition to the many off-the-shelf DSA platforms, each of which has their own repository and format as well.
 
 In the broader sense of meritocracy, it is worth pursuing if a common exchange format for metadata can be defined in a way that any developer can develop to in whatever technology or way their passion drives them.
 
 #### Working guidelines
 
-For any change, create a new branch (no direct commits to master branch).
+For any change, create a new branch (no direct commits to the `main` branch).
