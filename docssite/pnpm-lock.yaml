@@ -15,7 +15,7 @@ importers:
         specifier: ^0.38.5
         version: 0.38.5(astro@6.3.2(@types/node@24.12.4)(rollup@4.60.3)(yaml@2.9.0))
       astro:
-        specifier: ^6.3.2
+        specifier: ^6.3.1
         version: 6.3.2(@types/node@24.12.4)(rollup@4.60.3)(yaml@2.9.0)
       sharp:
         specifier: ^0.34.5
